@@ -62,14 +62,7 @@ class BezierCurve {
     this._container.appendChild(dragBtn);
   }
 
-  _movePointer(dragBtn, p) {
-    dragBtn.style.left = `${p.x - this._pointSize / 2}px`;
-    dragBtn.style.top = `${this._canvas.height - p.y - this._pointSize / 2}px`;
-  }
-
   _bindDrag(dragBtn, p) {
-    // 鼠标按下时，选中圆点在数学坐标系中的位置
-    const downPoint = new Point(-1, -1);
     // 鼠标按下时，相对圆点中心的偏移量
     let downPointOffsetX = 0;
     let downPointOffsetY = 0;
@@ -86,7 +79,8 @@ class BezierCurve {
       p.x = canvasX;
       p.y = this._canvas.height - canvasY;
       
-      this._movePointer(dragBtn, p);
+      dragBtn.style.left = `${p.x - this._pointSize / 2}px`;
+      dragBtn.style.top = `${this._canvas.height - p.y - this._pointSize / 2}px`;
 
       // 更新
       this.render();
@@ -94,9 +88,6 @@ class BezierCurve {
 
     dragBtn.addEventListener('mousedown', (e) => {
       // 加 1 是因为圆点的边框宽度不算在offsetX里
-      downPoint.x = e.clientX - (e.offsetX + 1) + this._pointSize / 2;
-      downPoint.y = e.clientY - (e.offsetY + 1) + this._pointSize / 2;
-      
       downPointOffsetX = e.offsetX + 1 - this._pointSize / 2;
       downPointOffsetY = e.offsetY + 1 - this._pointSize / 2;
 
