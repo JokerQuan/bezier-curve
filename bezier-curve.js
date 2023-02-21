@@ -92,9 +92,9 @@ class BezierCurve {
       downPointOffsetY = e.offsetY + 1 - this._pointSize / 2;
 
       document.addEventListener('mousemove', moveFn);
-    });
-    document.addEventListener('mouseup', (e) => {
-      document.removeEventListener('mousemove', moveFn);
+      document.addEventListener('mouseup', (e) => {
+        document.removeEventListener('mousemove', moveFn);
+      });
     });
   }
 
