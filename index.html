@@ -11,11 +11,12 @@
       padding: 0;
     }
     #container1,
-    #container2 {
+    #container2,
+    #container3 {
       margin: 50px;
       width: 600px;
       height: 400px;
-      /* float: left; */
+      float: left;
     }
 
     .pointer {
@@ -86,6 +87,13 @@
     drags[3].onMove = (x, y) => {
       bezier_curve_no_drag.updateC2(x, y);
     }
+  </script>
+
+  <!-- 纯 canvas -->
+  <div id="container3"></div>
+  <script src="./bezier-curve-pure-canvas.js"></script>
+  <script>
+    const bezier_curve_pure_canvas = new BezierCurvePureCanvas("#container3");
   </script>
 </body>
 </html>
