@@ -1,4 +1,4 @@
-class BezierCurve {
+class BezierCurveNoDrag {
   startPoint = null;
   endPoint = null;
   ctlPoint1 = null;
@@ -28,65 +28,6 @@ class BezierCurve {
     this.endPoint = new Point(this._canvas.width, this._canvas.height);
     this.ctlPoint1 = new Point(this._canvas.width * 1/4, this._canvas.height * 3/4);
     this.ctlPoint2 = new Point(this._canvas.width * 3/4, this._canvas.height * 1/4);
-
-    this._createDragPointer(this.startPoint, 'white');
-    this._createDragPointer(this.endPoint, 'white');
-    this._createDragPointer(this.ctlPoint1, 'red');
-    this._createDragPointer(this.ctlPoint2, 'blue');
-  }
-
-  _createDragPointer(p, color) {
-    const dragBtn = document.createElement('button');
-    dragBtn.style.cssText = `
-      position: absolute;
-      width: ${this._pointSize}px;
-      height: ${this._pointSize}px;
-      left: ${p.x - this._pointSize / 2}px;
-      top: ${this._canvas.height - p.y - this._pointSize / 2}px;
-      background-color: ${color};
-      border: 1px solid black;
-      border-radius: 50%;
-      box-sizing: border-box;
-      cursor: move;
-    `;
-    this._bindDrag(dragBtn, p);
-    this._container.appendChild(dragBtn);
-  }
-
-  _bindDrag(dragBtn, p) {
-    // 鼠标按下时，相对圆点中心的偏移量
-    let downPointOffsetX = 0;
-    let downPointOffsetY = 0;
-    const moveFn = (moveEvent) => {
-      let canvasX = moveEvent.pageX - this._container.offsetLeft - downPointOffsetX;
-      let canvasY = moveEvent.pageY - this._container.offsetTop - downPointOffsetY;
-
-      // 处理边界
-      if (canvasX < 0) canvasX = 0;
-      if (canvasX > this._canvas.width) canvasX = this._canvas.width;
-      if (canvasY < 0) canvasY = 0;
-      if (canvasY > this._canvas.height) canvasY = this._canvas.height;
-      
-      p.x = canvasX;
-      p.y = this._canvas.height - canvasY;
-      
-      dragBtn.style.left = `${p.x - this._pointSize / 2}px`;
-      dragBtn.style.top = `${this._canvas.height - p.y - this._pointSize / 2}px`;
-
-      // 更新
-      this.render();
-    };
-
-    dragBtn.addEventListener('mousedown', (e) => {
-      // 加 1 是因为圆点的边框宽度不算在offsetX里
-      downPointOffsetX = e.offsetX + 1 - this._pointSize / 2;
-      downPointOffsetY = e.offsetY + 1 - this._pointSize / 2;
-
-      document.addEventListener('mousemove', moveFn);
-      document.addEventListener('mouseup', (e) => {
-        document.removeEventListener('mousemove', moveFn);
-      });
-    });
   }
 
   _drawBackground() {
@@ -151,6 +92,30 @@ class BezierCurve {
     );
     _ctx.stroke();
     _ctx.closePath();
+  }
+
+  updateStart(x, y) {
+    this.startPoint.x = x;
+    this.startPoint.y = this._canvas.height - y;
+    this.render();
+  }
+
+  updateEnd(x, y) {
+    this.endPoint.x = x;
+    this.endPoint.y = this._canvas.height - y;
+    this.render();
+  }
+
+  updateC1(x, y) {
+    this.ctlPoint1.x = x;
+    this.ctlPoint1.y = this._canvas.height - y;
+    this.render();
+  }
+
+  updateC2(x, y) {
+    this.ctlPoint2.x = x;
+    this.ctlPoint2.y = this._canvas.height - y;
+    this.render();
   }
 
   render() {

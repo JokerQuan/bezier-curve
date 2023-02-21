@@ -10,18 +10,82 @@
       margin: 0;
       padding: 0;
     }
-    #container {
+    #container1,
+    #container2 {
       margin: 50px;
-      width: 900px;
-      height: 600px;
+      width: 600px;
+      height: 400px;
+      /* float: left; */
+    }
+
+    .pointer {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background-color: white;
+      border: 1px solid black;
+      border-radius: 50%;
+      box-sizing: border-box;
+      cursor: move;
+    }
+    .bg-red {
+      background-color: red;
+    }
+    .bg-blue {
+      background-color: blue;
+    }
+    .p1 {
+      left: -8px;
+      top: 392px;
+    }
+    .p2 {
+      left: 592px;
+      top: -8px;
+    }
+    .p3 {
+      left: 142px;
+      top: 92px;
+    }
+    .p4 {
+      left: 442px;
+      top: 292px;
     }
   </style>
 </head>
 <body>
-  <div id="container"></div>
+  <div id="container1"></div>
+  <script src="./point.js"></script>
   <script src="./bezier-curve.js"></script>
   <script>
-    const bezier_curve = new BezierCurve("#container");
+    const bezier_curve = new BezierCurve("#container1");
+  </script>
+
+  <!-- 拖拽分离 -->
+  <div id="container2">
+    <div class="pointer p1"></div>
+    <div class="pointer p2"></div>
+    <div class="pointer p3 bg-red"></div>
+    <div class="pointer p4 bg-blue"></div>
+  </div>
+  <script src="./bezier-curve-no-drag.js"></script>
+  <script src="./drag.js"></script>
+  <script>
+    const container = document.querySelector("#container2");
+    const bezier_curve_no_drag = new BezierCurveNoDrag("#container2");
+    const pointers = document.querySelectorAll(".pointer");
+    const drags = Array.prototype.map.call(pointers, d => new Drag(d, container));
+    drags[0].onMove = (x, y) => {
+      bezier_curve_no_drag.updateStart(x, y);
+    }
+    drags[1].onMove = (x, y) => {
+      bezier_curve_no_drag.updateEnd(x, y);
+    }
+    drags[2].onMove = (x, y) => {
+      bezier_curve_no_drag.updateC1(x, y);
+    }
+    drags[3].onMove = (x, y) => {
+      bezier_curve_no_drag.updateC2(x, y);
+    }
   </script>
 </body>
 </html>
